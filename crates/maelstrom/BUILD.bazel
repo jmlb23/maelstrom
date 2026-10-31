@@ -1,0 +1,13 @@
+load("@rules_rust//rust:defs.bzl", "rust_library")
+
+
+rust_library(
+    name = "maelstrom",
+    srcs = glob(["*.rs"]),
+    crate_root = "lib.rs",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@crates//:serde",
+        "@crates//:serde_json"
+    ],
+)
