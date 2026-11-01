@@ -1,9 +1,6 @@
-use std::{
-    collections::HashMap,
-    sync::{Arc, Mutex},
-};
+use std::collections::HashMap;
 
-use serde_json::{json, Value};
+use serde_json::Value;
 
 pub struct CurrentState {
     pub msg_id: u64,
@@ -32,7 +29,7 @@ impl Maelstrom {
     pub fn run(&mut self) {
         loop {
             let mut buf = String::new();
-            while let Ok(size) = std::io::stdin().read_line(&mut buf) {
+            while let Ok(_) = std::io::stdin().read_line(&mut buf) {
                 let value = serde_json::from_str::<Value>(buf.as_str()).ok();
                 self.next_msg_id += 1;
                 match value
@@ -49,7 +46,8 @@ impl Maelstrom {
                             .and_then(|v| v.get("body"))
                             .and_then(|b| b.get("node_id"))
                             .and_then(|n| n.as_str())
-                            .map(|st| st.to_string()).unwrap_or_default();
+                            .map(|st| st.to_string())
+                            .unwrap_or_default();
                         self.node_id = node_id.clone();
                         self.callbacks.get("init").and_then(|cal| {
                             value.map(|pr| {
