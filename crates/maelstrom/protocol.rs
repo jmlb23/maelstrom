@@ -31,6 +31,10 @@ impl Maelstrom {
             let mut buf = String::new();
             let _ = std::io::stdin().read_line(&mut buf);
             let value = serde_json::from_str::<Value>(buf.as_str()).ok();
+            if buf.trim() == "quit" {
+                eprintln!("quitting gracefuly");
+                break;
+            }
             self.next_msg_id += 1;
             match value
                 .clone()
