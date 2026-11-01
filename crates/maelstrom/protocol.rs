@@ -37,7 +37,6 @@ impl Maelstrom {
             }
             self.next_msg_id += 1;
             match value
-                .clone()
                 .as_ref()
                 .and_then(|v| v.get("body"))
                 .and_then(|b| b.get("type"))
@@ -45,7 +44,6 @@ impl Maelstrom {
             {
                 Some("init") => {
                     let node_id = value
-                        .clone()
                         .as_ref()
                         .and_then(|v| v.get("body"))
                         .and_then(|b| b.get("node_id"))
