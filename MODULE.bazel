@@ -10,5 +10,6 @@ crate.from_specs()
 
 crate.spec(package = "serde", version = "1.0", features = ["derive"])
 crate.spec(package = "serde_json", version = "1.0")
+crate.spec(package = "uuid", version = "1.29.0", features = ["v4"])
 
 use_repo(crate, "crates")

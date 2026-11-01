@@ -1,10 +1,12 @@
 use std::collections::HashMap;
 
 use serde_json::Value;
+use uuid::Uuid;
 
 pub struct CurrentState {
     pub msg_id: u64,
     pub node_id: String,
+    pub generated_id: String,
 }
 
 pub struct Maelstrom {
@@ -59,7 +61,8 @@ impl Maelstrom {
                                     pr,
                                     CurrentState {
                                         node_id: node_id.clone(),
-                                        msg_id: self.next_msg_id
+                                        msg_id: self.next_msg_id,
+                                        generated_id: String::new()
                                     }
                                 )
                             )
@@ -75,7 +78,26 @@ impl Maelstrom {
                                     pr,
                                     CurrentState {
                                         node_id: self.node_id.to_string(),
-                                        msg_id: self.next_msg_id
+                                        msg_id: self.next_msg_id,
+                                        generated_id: String::new()
+                                    }
+                                )
+                            )
+                        })
+                    });
+                }
+                Some("generate") => {
+                    eprintln!("value: ----{}", value.clone().unwrap());
+                    self.callbacks.get("generate").and_then(|cal| {
+                        value.map(|pr| {
+                            println!(
+                                "{}",
+                                cal(
+                                    pr,
+                                    CurrentState {
+                                        node_id: self.node_id.to_string(),
+                                        msg_id: self.next_msg_id,
+                                        generated_id: format!("{}", Uuid::new_v4().to_string())
                                     }
                                 )
                             )

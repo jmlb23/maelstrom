@@ -27,5 +27,18 @@ fn main() {
             }
         })
     });
+    mprot.add("generate", |req: Value, state: CurrentState| {
+        let body = req.get("body");
+        json!({
+            "src": state.node_id,
+            "dest": req.get("src"),
+            "body": {
+                "type": "generate_ok",
+                "msg_id": state.msg_id,
+                "in_reply_to": body.and_then(|b| b.get("msg_id")),
+                "id": state.generated_id
+            }
+        })
+    });
     mprot.run();
 }
