@@ -40,5 +40,47 @@ fn main() {
             }
         })
     });
+    mprot.add("broadcast", |req: Value, state: CurrentState| {
+        let body = req.get("body");
+        json!({
+            "src": state.node_id,
+            "dest": req.get("src"),
+            "body": {
+                "type": "broadcast_ok",
+                "msg_id": state.msg_id,
+                "in_reply_to": body.and_then(|b| b.get("msg_id")),
+            }
+
+        })
+    });
+    mprot.add("read", |req: Value, state: CurrentState| {
+        let body = req.get("body");
+        eprintln!("{:?}",state.messages.clone());
+        json!({
+            "src": state.node_id,
+            "dest": req.get("src"),
+            "body": {
+                "type": "read_ok",
+                "messages": state.messages,
+                "msg_id": state.msg_id,
+                "in_reply_to": body.and_then(|b| b.get("msg_id")),
+            }
+
+        })
+    });
+    mprot.add("topology", |req: Value, state: CurrentState| {
+        let body = req.get("body");
+        json!({
+            "src": state.node_id,
+            "dest": req.get("src"),
+            "body": {
+                "type": "topology_ok",
+                "msg_id": state.msg_id,
+                "in_reply_to": body.and_then(|b| b.get("msg_id")),
+            }
+
+        })
+    });
+
     mprot.run();
 }
