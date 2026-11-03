@@ -14,67 +14,14 @@ fn main() {
             }
         })
     });
-    mprot.add("echo", |req: Value, state: CurrentState| {
-        let body = req.get("body");
-        json!({
-            "src": state.node_id,
-            "dest": req.get("src"),
-            "body": {
-                "type": "echo_ok",
-                "msg_id": state.msg_id,
-                "in_reply_to": body.and_then(|b| b.get("msg_id")),
-                "echo": body.and_then(|b| b.get("echo")),
-            }
-        })
-    });
-    mprot.add("generate", |req: Value, state: CurrentState| {
-        let body = req.get("body");
-        json!({
-            "src": state.node_id,
-            "dest": req.get("src"),
-            "body": {
-                "type": "generate_ok",
-                "msg_id": state.msg_id,
-                "in_reply_to": body.and_then(|b| b.get("msg_id")),
-                "id": state.generated_id
-            }
-        })
-    });
-    mprot.add("broadcast", |req: Value, state: CurrentState| {
-        let body = req.get("body");
-        json!({
-            "src": state.node_id,
-            "dest": req.get("src"),
-            "body": {
-                "type": "broadcast_ok",
-                "msg_id": state.msg_id,
-                "in_reply_to": body.and_then(|b| b.get("msg_id")),
-            }
-
-        })
-    });
     mprot.add("read", |req: Value, state: CurrentState| {
         let body = req.get("body");
-        eprintln!("{:?}",state.messages.clone());
         json!({
             "src": state.node_id,
             "dest": req.get("src"),
             "body": {
                 "type": "read_ok",
-                "messages": state.messages,
-                "msg_id": state.msg_id,
-                "in_reply_to": body.and_then(|b| b.get("msg_id")),
-            }
-
-        })
-    });
-    mprot.add("topology", |req: Value, state: CurrentState| {
-        let body = req.get("body");
-        json!({
-            "src": state.node_id,
-            "dest": req.get("src"),
-            "body": {
-                "type": "topology_ok",
+                "value": state.g_set,
                 "msg_id": state.msg_id,
                 "in_reply_to": body.and_then(|b| b.get("msg_id")),
             }
@@ -83,9 +30,17 @@ fn main() {
     });
     mprot.add("add", |req: Value, state: CurrentState| {
         let body = req.get("body");
-        unimplemented!()
-    });
+        json!({
+            "src": state.node_id,
+            "dest": req.get("src"),
+            "body": {
+                "type": "add_ok",
+                "msg_id": state.msg_id,
+                "in_reply_to": body.and_then(|b| b.get("msg_id")),
+            }
 
+        })
+    });
 
     mprot.run();
 }
