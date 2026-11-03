@@ -200,6 +200,9 @@ impl Maelstrom {
                         })
                     });
                 }
+                Some("add") => {
+                    unimplemented!()
+                }
                 Some("broadcast_ok") => {
                     
                 }

@@ -81,5 +81,11 @@ fn main() {
 
         })
     });
+    mprot.add("add", |req: Value, state: CurrentState| {
+        let body = req.get("body");
+        unimplemented!()
+    });
+
+
     mprot.run();
 }
