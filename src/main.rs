@@ -7,11 +7,11 @@ fn main() {
         json!({
             "src": state.node_id,
             "dest": req.get("src"),
-            "body": json!({
+            "body": {
                 "type": "init_ok",
                 "msg_id": state.msg_id,
                 "in_reply_to": req.get("body").and_then(|b| b.get("msg_id")),
-            })
+            }
         })
     });
     mprot.add("echo", |req: Value, state: CurrentState| {
@@ -81,6 +81,5 @@ fn main() {
 
         })
     });
-
     mprot.run();
 }
