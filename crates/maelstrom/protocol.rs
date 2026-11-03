@@ -15,7 +15,7 @@ pub struct Maelstrom {
     next_msg_id: u64,
     node_id: String,
     topology: HashSet<String>,
-    callbacks: HashMap<String, Box<dyn Fn(Value, CurrentState) -> Value + 'static>>,
+    callbacks: HashMap<String, fn(Value, CurrentState) -> Value>,
     g_set: HashSet<u64>,
 }
 
@@ -26,8 +26,8 @@ impl Maelstrom {
         }
     }
 
-    pub fn add(&mut self, cmd: &str, callback: impl Fn(Value, CurrentState) -> Value + 'static) {
-        self.callbacks.insert(cmd.to_string(), Box::new(callback));
+    pub fn add(&mut self, cmd: &str, callback: fn(Value, CurrentState) -> Value) {
+        self.callbacks.insert(cmd.to_string(), callback);
     }
 
     fn extract_topology(value: Option<Value>) -> HashSet<String> {
